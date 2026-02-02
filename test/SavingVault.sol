@@ -19,7 +19,7 @@ contract SavingVaultTest is Test {
     function test_Deposit() public {
         vm.startPrank(owner);
         savingVault.deposit{value: 1 ether}();
-        assertEq(savingVault.balance(), 1 ether);
+        assertEq(address(savingVault).balance, 1 ether);
         vm.stopPrank();
     }
 
@@ -28,7 +28,7 @@ contract SavingVaultTest is Test {
         savingVault.deposit{value: 1 ether}();
         vm.warp(block.timestamp + 6 minutes);
         savingVault.withdraw();
-        assertEq(savingVault.balance(), 0);
+        assertEq(address(savingVault).balance, 0);
         vm.stopPrank();
     }
 
@@ -38,7 +38,7 @@ contract SavingVaultTest is Test {
         vm.warp(block.timestamp + 4 minutes);
         vm.expectRevert(SavingVault.FundsLocked.selector);
         savingVault.withdraw();
-        assertEq(savingVault.balance(), 1 ether);
+        assertEq(address(savingVault).balance, 1 ether);
         vm.stopPrank();
     }
 
