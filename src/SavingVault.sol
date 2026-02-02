@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.30;
 
-contract SavingVault {
+import {ReentrancyGuard} from "../lib/openzeppelin-contracts/contracts/utils/ReentrancyGuard.sol";
+
+contract SavingVault is ReentrancyGuard {
     uint256 public balance;
     address public owner;
     uint256 public currentUnlockTime;
@@ -42,7 +44,7 @@ contract SavingVault {
         emit Deposit(msg.sender, msg.value);
     }
 
-    function withdraw() public onlyOwner {
+    function withdraw() public onlyOwner nonReentrant {
         if (block.timestamp <= currentUnlockTime) {
             revert FundsLocked();
         }
